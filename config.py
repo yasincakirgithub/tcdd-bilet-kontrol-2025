@@ -10,18 +10,22 @@ auth_token = """eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJlVFFicDhDMmpi
 base_url = "https://web-api-prod-ytp.tcddtasimacilik.gov.tr"
 availability_endpoint = "/tms/train/train-availability"
 
-# SMS
-twilio_auth_token = "your_twilio_auth_token"
-twilio_account_sid = "your_twilio_account_sid"
-twilio_number = "+1234567890"
+# SMS and call settings from Twilio API (please refer to https://console.twilio.com)
+twilio_auth_token = "" 
+twilio_account_sid = ""
+twilio_number = ""
+
+# Notification types to be used. Options: sms, call, win11
+# WARNING: If you use sms, Twilio will charge you for each SMS sent. If you use call, it won't charge you as long as you don't answer the call.
+notification_types = ["win11"] # Edit this to enable SMS or call notifications. For example: ["sms", "call", "win11"]
 
 # Journey details (check stations.json for valid station names)
-departure_station_name = "EXAMPLE DEPARTURE STATION"
-arrival_station_name = "EXAMPLE ARRIVAL STATION"
-desired_departure_date = turkey_tz.localize(datetime(2025, 3, 28, 0, 0, 0)).astimezone(utc_tz).strftime("%d-%m-%Y %H:%M:%S")
-desired_departure_start_time = datetime.strptime("08:00", "%H:%M").time()
-desired_departure_end_time = datetime.strptime("10:00", "%H:%M").time()
-notificated_number = "+12345678901"
+departure_station_name = "İSTANBUL(SÖĞÜTLÜÇEŞME)"
+arrival_station_name = "ANKARA GAR"
+desired_departure_date = turkey_tz.localize(datetime(2025, 5, 6, 0, 0, 0)).astimezone(utc_tz).strftime("%d-%m-%Y %H:%M:%S")
+desired_departure_start_time = datetime.strptime("19:20", "%H:%M").time()
+desired_departure_end_time = datetime.strptime("19:40", "%H:%M").time()
+notificated_number = ""
 
 # Wait time between checks in seconds
-sleep_time = 150
+sleep_time = 30

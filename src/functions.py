@@ -2,7 +2,7 @@ import pytz
 import config
 from datetime import datetime
 from .api import post_request
-from .sms import send_sms
+from .notifier import send_sms, make_call, send_win11_notification
 from .util import load_stations
 
 stations = load_stations()
@@ -86,19 +86,27 @@ def fetch_and_filter_journeys(
         data = response.json()
         matching_trains = get_journey_train(data, desired_departure_start_time, desired_departure_end_time)
         if not matching_trains:
-            print("Belirtilen tarihe uygun tren bulunamadı.")
+            print("Belirtilen tarihe uygun tren bulunamadi.")
             return False
         else:
             for matching_train in matching_trains:
                 available_seats_by_class = get_available_seats_by_class(matching_train["data"])
                 for class_name, seats in available_seats_by_class.items():
                     if class_name == "EKONOMİ" and seats > 0:
+                        # send notifications based on the config
+                        if "win11" in config.notification_types:
+                            send_win11_notification(f'{departure_station_name} - {arrival_station_name} {matching_train['departure_time'].strftime('%H:%M')} - Ekonomi sinifi {seats} boş koltuk.')
 
-                        sms_message = f"{departure_station_name} - {arrival_station_name} {matching_train['departure_time'].strftime('%H:%M')} - Ekonomi sınıfı {seats} boş koltuk."
-                        send_sms(
-                            sms_message,
-                            notificated_number=notificated_number,
-                        )
+                        if "sms" in config.notification_types:
+                            sms_message = f"{departure_station_name} - {arrival_station_name} {matching_train['departure_time'].strftime('%H:%M')} - Ekonomi sinifi {seats} boş koltuk."
+                            send_sms(
+                                sms_message,
+                                notificated_number=notificated_number,
+                            )
+
+                        if "call" in config.notification_types:
+                            make_call(notificated_number=notificated_number)
+
                         return False
 
     return True

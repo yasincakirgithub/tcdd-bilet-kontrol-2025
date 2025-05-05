@@ -1,11 +1,15 @@
-## RUN
+# Requirements
 
-```terminal
+- Python 3.8 or higher
 
-- edit config.py
-$ pip install -r requirements.txt
-$ nohup python3 main.py > output.log 2>&1 &**
+# Usage
 
+1. Replace the `config.py` file with your own configuration.
+2. Install the required packages using pip.
+```bash
+pip install -r requirements.txt
 ```
-
-[LinkedIn](https://www.linkedin.com/in/yasincakir26/)
+3. Run the main using Python.
+```terminal
+python main.py
+```
