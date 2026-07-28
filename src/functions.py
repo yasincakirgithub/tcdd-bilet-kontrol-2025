@@ -1,8 +1,11 @@
-import pytz
-import config
+import uuid
 from datetime import datetime
+
+import config
+import pytz
+
 from .api import post_request
-from .sms import send_sms
+from .sms import call_number, send_sms
 from .util import load_stations
 
 stations = load_stations()
@@ -58,6 +61,14 @@ def fetch_and_filter_journeys(
         "Origin": "https://ebilet.tcddtasimacilik.gov.tr",
         "Connection": "keep-alive",
         "unit-id": "3895",
+        "Accept-Language": "tr",
+        "Accept-Encoding": "gzip, deflate, br, zstd",
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-site",
+        "sec-ch-ua": '"Chromium";v="134", "Not-A.Brand";v="24", "Google Chrome";v="134"',
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": '"Windows"',
     }
     params = {
         "environment": config.environment,
@@ -75,6 +86,7 @@ def fetch_and_filter_journeys(
         ],
         "passengerTypeCounts": [{"id": 0, "count": 1}],
         "searchReservation": False,
+        "blTrainTypes": ["TURISTIK_TREN"],
     }
 
     response = post_request(url=f"{config.base_url}{config.availability_endpoint}", body=body, headers=headers, params=params)
@@ -94,11 +106,9 @@ def fetch_and_filter_journeys(
                 for class_name, seats in available_seats_by_class.items():
                     if class_name == "EKONOMİ" and seats > 0:
 
-                        sms_message = f"{departure_station_name} - {arrival_station_name} {matching_train['departure_time'].strftime('%H:%M')} - Ekonomi sınıfı {seats} boş koltuk."
-                        send_sms(
-                            sms_message,
-                            notificated_number=notificated_number,
-                        )
+                        call_number(notificated_number)
+                        sms_message = f"{departure_station_name} - {arrival_station_name} {matching_train['departure_time'].strftime('%H:%M')} - Ekonomi sınıfı {seats} boş koltuk. {uuid.uuid4().hex[0:6]}"
+                        send_sms(sms_message, notificated_number=notificated_number)
                         return False
 
     return True

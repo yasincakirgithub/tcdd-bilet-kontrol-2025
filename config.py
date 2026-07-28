@@ -1,5 +1,6 @@
-import pytz
 from datetime import datetime
+
+import pytz
 
 # Variables
 turkey_tz = pytz.timezone("Europe/Istanbul")
@@ -11,17 +12,17 @@ base_url = "https://web-api-prod-ytp.tcddtasimacilik.gov.tr"
 availability_endpoint = "/tms/train/train-availability"
 
 # SMS
-twilio_auth_token = "your_twilio_auth_token"
-twilio_account_sid = "your_twilio_account_sid"
-twilio_number = "+1234567890"
+twilio_auth_token = "twilio_auth_token"
+twilio_account_sid = "twilio_account_sid"
+twilio_number = "+twilio_number"
 
 # Journey details (check stations.json for valid station names)
-departure_station_name = "EXAMPLE DEPARTURE STATION"
-arrival_station_name = "EXAMPLE ARRIVAL STATION"
-desired_departure_date = turkey_tz.localize(datetime(2025, 3, 28, 0, 0, 0)).astimezone(utc_tz).strftime("%d-%m-%Y %H:%M:%S")
-desired_departure_start_time = datetime.strptime("08:00", "%H:%M").time()
-desired_departure_end_time = datetime.strptime("10:00", "%H:%M").time()
-notificated_number = "+12345678901"
+departure_station_name = "ESKİŞEHİR"
+arrival_station_name = "ERYAMAN YHT"
+desired_departure_date = turkey_tz.localize(datetime(2026, 3, 21, 0, 0, 0)).astimezone(utc_tz).strftime("%d-%m-%Y %H:%M:%S")
+desired_departure_start_time = datetime.strptime("14:15", "%H:%M").time()
+desired_departure_end_time = datetime.strptime("14:15", "%H:%M").time()
+notificated_number = "+notificated_number"
 
 # Wait time between checks in seconds
-sleep_time = 150
+sleep_time = 100
